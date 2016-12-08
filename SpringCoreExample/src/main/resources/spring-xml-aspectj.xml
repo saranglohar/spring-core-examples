@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+<aop:aspectj-autoproxy />
+
+<bean id="opBean" class="com.sarya.spring.aspectj.xml.Operation">	</bean>
+	
+<bean id="trackAspect" class="com.sarya.spring.aspectj.xml.TrackOperation"></bean>
+		
+<aop:config>
+  <aop:aspect id="myaspect" ref="trackAspect" >
+     <!-- @Before -->
+     <aop:pointcut id="pointCut" expression="execution(* com.sarya.spring.aspectj.xml.Operation.*(..))" />
+     
+     <!-- All advise on one method then advices are executed in following sequence. 
+     	  Its a user dependent sequence.-->
+     <aop:around method="myAroundAdvice" pointcut-ref="pointCut" />
+     <aop:before method="myBeforeAdvice" pointcut-ref="pointCut" />    
+     <aop:after-returning method="myAfterReturningAdvice" returning="result" pointcut-ref="pointCut" />
+     <aop:after method="myAfterAdvice" pointcut-ref="pointCut" />
+     <aop:after-throwing method="myThrowingAdvice" throwing="error" pointcut-ref="pointCut" />
+     
+  </aop:aspect>
+</aop:config>
+	
+</beans>
